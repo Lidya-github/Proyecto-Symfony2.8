@@ -1,0 +1,72 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    firewalls:
+        backend:
+            pattern: ^/backend
+            provider: administradores
+            http_basic: ~
+        extranet:
+            pattern: ^/extranet
+            provider: tiendas
+            anonymous: ~
+            form_login:
+                login_path: extranet_login
+                check_path: extranet_login_check
+            logout:
+                path: extranet_logout
+        frontend:
+            pattern: ^/
+            provider: usuarios
+            anonymous: ~
+            form_login: 
+                use_referer: true
+                default_target_path: usuario_compras
+                always_use_default_target_path: true
+                login_path: usuario_login
+                check_path: usuario_login_check
+                remember_me: true
+            logout:
+                path:       usuario_logout 
+            switch_user: { role: ROLE_ADMIN }
+            remember_me:
+                secret: cupon1234
+                lifetime: 6048800
+    access_control:
+        - { path: '^/[a-z]{2}/usuario/login',roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: '^/[a-z]{2}/usuario/registro',roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: '^/[a-z]{2}/usuario/*', roles: ROLE_USUARIO }
+        - { path: ^/extranet/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/extranet/*, roles: ROLE_TIENDA }
+        - { path: ^/backend/*, roles: ROLE_ADMIN }
+    access_decision_manager:
+        strategy: unanimous
+    providers:
+        usuarios:
+            entity: { class: AppBundle\Entity\Usuario, property: email }
+        tiendas:
+            entity: { class: AppBundle\Entity\Tienda, property: login }
+        administradores:
+            memory:
+                users:
+                    admin: { password: '$2y$13$w700yeSs8FxMLrEXaCATgehosZf9vx09RbwKddswl9LN/22dKL2qO', roles: ROLE_ADMIN }
+    encoders:
+        AppBundle\Entity\Usuario: bcrypt
+        AppBundle\Entity\Tienda: bcrypt
+        Symfony\Component\Security\Core\User\User: bcrypt
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_TIENDA, ROLE_USUARIO]
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+            # activate different ways to authenticate
+
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
+            # https://symfony.com/doc/current/security/form_login_setup.html
+            #form_login: ~

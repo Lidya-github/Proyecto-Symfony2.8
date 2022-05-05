@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/normalizar.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/comun.css') }}" />
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+        {% block rss %}{% endblock %}
+    </head>
+    
+    <body id=" {% block id'' %}">
+
+        <div id="contenedor">
+        {% block body %}{% endblock %}
+
+        <footer>
+
+            {% set locale = app.request.locale %}
+                {% if locale == 'es' %}
+                    <span>Español</span>
+                    <a href="{{ path('portada', { _locale: 'en' }) }}">English</a>
+                {% elseif locale == 'en' %}
+                    <a href="{{ path('portada', { _locale: 'es' }) }}">Español</a>
+                    <span>English</span>
+                {% endif %}
+            &copy; {{ 'now'|date('Y') }} - Cupon
+            <a href="{{ path('pagina', { nombrePagina: 'ayuda' }) }}">Ayuda</a>
+            <a href="#">Contacto</a>
+            <a href="{{ path('pagina', { nombrePagina: 'privacidad' }) }}">Privacidad</a>
+            <a href="{{ path('pagina', { nombrePagina: 'sobre_nosotros' }) }}">Sobre nosotros</a>
+        </footer>
+
+
+
+        {% block javascripts %}{% endblock %}
+        </div>
+    </body>
+</html>

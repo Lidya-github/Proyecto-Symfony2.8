@@ -1,0 +1,38 @@
+{% extends 'frontend.html.twig' %}
+{% block id 'usuario' %}
+
+{% block title %}Regístrate gratis como usuario{% endblock %}
+
+{% block article %}
+    <h1>{{ block('title') }}</h1>
+    {{ form_start(formulario) }}
+        {{ form_errors(formulario) }}
+        <fieldset>
+            <legend>Datos personales</legend>
+                {{ form_row(formulario.nombre) }}
+                {{ form_row(formulario.apellidos) }}
+                {{ form_row(formulario.fechaNacimiento) }}
+                {{ form_row(formulario.dni) }}
+                {{ form_row(formulario.direccion) }}
+        </fieldset>
+        <br/>
+        <fieldset>
+            <legend>Datos de acceso</legend>
+                {{ form_row(formulario.email) }}
+                {{ form_row(formulario.passwordEnClaro) }}
+        </fieldset>
+        <br/>
+        <fieldset>
+            <legend>Datos económicos</legend>
+                {{ form_row(formulario.numeroTarjeta) }}
+                {{ form_row(formulario.ciudad) }}
+        </fieldset>
+        <br/>
+    {{ form_row(formulario.permiteEmail) }}
+        <br/>
+    {{ form_end(formulario) }}
+    <br/>
+
+{% endblock %}
+
+{% block aside %}{% endblock %}

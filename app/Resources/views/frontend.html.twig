@@ -1,0 +1,33 @@
+
+{% extends 'base.html.twig' %}
+
+{# {% set ciudadSeleccionada = app.request.attributes.get('ciudad', ciudad_por_defecto) %} #}
+{% set ciudadSeleccionada = app.request.attributes.has('ciudad') ? app.request.attributes.get('ciudad'): ciudad_por_defecto %}
+
+{% block stylesheets %}
+    {{  parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend.css') }}" />
+{% endblock %}
+{% block body %}
+    <header>
+        <h1><a href="{{ path('portada') }}">CUPON</a></h1>
+        <nav>
+            <ul>
+                <li><a href="{{ path('portada') }}">{{ 'menu.dia'|trans}}</a></li>
+                <li><a href="{{ path('ciudad_recientes', { ciudad: ciudadSeleccionada})}}">{{ 'menu.recientes'|trans}}</a></li>
+                <li><a href="{{ path('usuario_compras') }}">{{ 'menu.mias'|trans }}</a></li>
+                <li>{{ render(controller('AppBundle:Ciudad:listaCiudades', {ciudad: ciudadSeleccionada})) }}</li>
+            </ul>
+        </nav>
+    </header>
+    <article>
+        {% block article %}{% endblock %}
+    </article>
+    <aside>
+        {% block aside %}
+            <section id="login">
+                {{ render(controller('AppBundle:Usuario:cajaLogin')) }}
+            </section>
+        {% endblock %}
+    </aside>
+{% endblock %}

@@ -1,0 +1,44 @@
+<html>
+    <head>
+
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <td><a href="{{ host ~ path('portada') }}">CUPON</a></td>
+                <td>Oferta del día en <span>{{ ciudad.nombre }}</span></td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ url('oferta_detalle', { slug: oferta.slug }) }}">{{oferta.nombre }}</a>
+                    {{ oferta.descripcion | mostrar_como_lista }}
+                </td>
+                <td>
+                    <img src="{{ host ~ asset(oferta.rutaFoto, 'ofertas') }}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="{{ host ~ path('oferta_detalle', { slug: oferta.slug}) }}">Ver oferta</a>
+                </td>
+                <td>
+                    {{ oferta.precio }} &euro; <strong>{{ descuento(oferta.precio, oferta.descuento) }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>¡Date prisa {{ usuario.nombre }}!</strong>
+                Esta oferta caduca el {{ oferta.fechaExpiracion|date }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                &copy; {{ 'now'|date('Y') }} - Has recibido este email porque estás suscrito al servicio de envío de
+                <em>"La oferta del día"</em>. 
+                Para darte d e baja de este servicio, accede a <a href="{{ host ~ path('usuario_perfil')}}">tu perfil</a> 
+                y desactiva la opción de envío de emails.
+                </td>
+            </tr>
+        </table>
+    </body>
+    
+</html>

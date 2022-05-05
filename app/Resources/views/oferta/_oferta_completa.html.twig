@@ -1,0 +1,61 @@
+{% set expirada=oferta.fechaExpiracion|date('YmdHis') < 'now'|date('YmdHis') %}
+<section class="descripcion">
+    <h1><a href="{{ path('oferta', { ciudad: oferta.ciudad.slug, slug: oferta.slug }) }}">{{ oferta.nombre }}</a></h1>
+    {{ oferta.descripcion|mostrar_como_lista }}
+    {% if not expirada %}
+        <a class="boton" href="#">Comprar</a>
+    {% endif %}
+</section>
+
+<section class="galeria">
+     <img alt="Fotografía de la oferta" src="{{ asset(oferta.rutaFoto, 'ofertas') }}">
+    <p class="precio">{{ oferta.precio }} &euro;<span>{{ descuento(oferta.precio, oferta.descuento) }}</span>
+    </p>
+    <p><strong>{{ 'Condiciones'|trans }}:</strong> {{ oferta.condiciones }}</p>
+</section>
+
+<section class="direccion">
+    <h2>Disfruta de la oferta en</h2>
+    <p>
+    <a href="#">{{ oferta.tienda.nombre }}</a>
+    {{ oferta.tienda.direccion }}
+    </p>
+</section>
+
+<section class="tienda">
+    <h2>Sobre la tienda</h2>
+    {{ oferta.tienda.descripcion }}
+</section>
+
+<section class="estado {{ expirada ? 'expirada' }}">
+    {% if not expirada %}
+        <div id="tiempo">
+            {% trans with { '%tiempo%' : oferta.fechaExpiracion|cuenta_atras } %}
+                <strong>Faltan</strong>  %tiempo% 
+            {% endtrans %}
+        </div>
+        <div class="compras">
+            {% trans with { '%compras%' : oferta.compras } %}
+                <strong>Compras</strong>  %compras% 
+            {% endtrans %}
+        </div>
+        <div class="faltan">
+            {% set faltan = oferta.umbral - oferta.compras %}
+            {% if faltan > 0 %}
+                Faltan <strong>{{ faltan }} compras</strong> para activar la oferta
+            {% else %}
+                <strong>Oferta activada</strong> por superar las
+                <strong>{{ oferta.umbral }}</strong> compras necesarias
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="tiempo">
+            {% trans with { '%fecha%' : oferta.fechaExpiracion|date('d/m/Y') } %}
+            <strong>Finalizada el</strong> %fecha% 
+            {% endtrans %}
+        </div>
+        <div class="compras">
+            <strong>Compras</strong>: {{ oferta.compras }}
+        </div>
+    {% endif %}
+</section>
